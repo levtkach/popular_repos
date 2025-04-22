@@ -1,12 +1,18 @@
+import argparse
 from github_api import fetch_repositories
 from utils import sort_repositories_by_stars, save_to_json
 from config import GITHUB_TOKEN
 
 
 def main():
-    query = input("Enter a search keyword (e.g., telegram): ")
+    parser = argparse.ArgumentParser(
+        description="Get top GitHub repositories by keyword"
+    )
+    parser.add_argument("query", type=str, help="Search keyword (e.g., telegram)")
+    args = parser.parse_args()
+
     try:
-        repos = fetch_repositories(query, GITHUB_TOKEN)
+        repos = fetch_repositories(args.query, GITHUB_TOKEN)
         top10 = sort_repositories_by_stars(repos)[:10]
 
         for repo in top10:
